@@ -13,7 +13,7 @@ if nargin < 2
     oct_sm = 24;
 end
 
-nfft = 8192;
+nfft = length(IR);
 
 for i=1:size(IR,2)
     [ mag_dB(:,i), f_lin ] = ir2mag_dB(IR(:,i), fs, nfft);

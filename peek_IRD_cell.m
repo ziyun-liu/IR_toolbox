@@ -1,5 +1,9 @@
-function [  ] = peek_IRD_cell( IRD , oct_sm)
+function [  ] = peek_IRD_cell( IRD , oct_sm, mic_sen_mkp)
 % Take a peek of IR and its freq response
+
+if nargin < 3
+    mic_sen_mkp = 0;
+end
 
 for i=1:size(IRD.IR,1)
     for j=1:size(IRD.IR,2)
@@ -7,6 +11,7 @@ for i=1:size(IRD.IR,1)
         IR(:,idx) = IRD.IR{i,j}; 
         [ mag_dB(:,idx), f_lin ] = ir2mag_dB(IR(:,idx), IRD.fs, IRD.length);
         mag_dB_sm(:,idx) = smoothSpectrum(mag_dB(:,idx),f_lin',oct_sm);
+        mag_dB_sm(:,idx) = mag_dB_sm(:,idx)+mic_sen_mkp;
     end
 end
 figure;
