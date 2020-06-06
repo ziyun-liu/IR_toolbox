@@ -24,7 +24,7 @@ if nargin < 6
     end
 end
         
-fl = 20;
+fl = 16;
 
 for idx = 1:size(IR_original,2)
     if n_trim > 0
@@ -38,16 +38,19 @@ for idx = 1:size(IR_original,2)
     [ mag(:,idx), phase(:,idx), f_lin ] = ir2magphase(IR(:,idx), fs, nfft);
     fl_idx = find(f_lin>fl,1,'first');
 
-%     phase(1:fl_idx,idx) = 0;
+%     phase(1:fl_idx,idx) = pi;
     
     mag_dB(:,idx) = db(mag(:,idx));    
     mag_dB_sm(:,idx) = smoothSpectrum(mag_dB(:,idx),f_lin',oct_sm);
     mag_dB_sm(:,idx) = mag_dB_sm(:,idx)+mic_sen_mkp;
     
-    [phd(:,idx), w] = phasedelay(IR(:,idx),1,nfft,fs);
-    phd(:,idx) = phd(:,idx)./(2*pi);
+
+    
     pha(:,idx) = unwrap(phase(:,idx));
     pha_sm(:,idx) = smoothSpectrum(pha(:,idx),f_lin',oct_sm);
+    
+%     [~, w] = phasedelay(IR(:,idx),1,nfft,fs);
+    phd(:,idx) = pha_sm(:,idx)./f_lin'./2./pi;
 
 end
 
@@ -70,7 +73,7 @@ title('Phase');
 ylim([-pi pi]);
 
 subplot(3,2,5);
-semilogx(w,phd);xlim([0 20000]);
+semilogx(f_lin,phd);xlim([0 20000]);
 title('Phase Delay');
 
 subplot(3,2,6);
