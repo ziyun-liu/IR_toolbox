@@ -47,10 +47,16 @@ for idx = 1:size(IR_original,2)
 
     
     pha(:,idx) = unwrap(phase(:,idx));
-    pha_sm(:,idx) = smoothSpectrum(pha(:,idx),f_lin',oct_sm);
+%     for kk = 1:size(pha,1)-1
+%         if  pha(kk,idx) < pha(kk+1,idx)-pi*0.25
+%             pha(kk+1:end,idx) = pha(kk+1:end,idx)-2*pi;
+%         end
+%     end
+    pha_sm(:,idx) = pha(:,idx);
+    pha_sm(2:end,idx) = smoothSpectrum(pha(2:end,idx),f_lin(2:end)',oct_sm);
     
-%     [~, w] = phasedelay(IR(:,idx),1,nfft,fs);
-    phd(:,idx) = pha_sm(:,idx)./f_lin'./2./pi;
+    [phd(:,idx), w] = phasedelay(IR(:,idx),1,nfft,fs);
+    gd(:,idx) = -(pha_sm(2:end,idx) - pha_sm(1:end-1,idx))./(w(2));
 
 end
 
@@ -64,21 +70,21 @@ plot(IR);
 title('IR Trimed');
 
 subplot(3,2,3);
-semilogx(f_lin,mag_dB_sm);xlim([0 20000]);
+semilogx(f_lin,mag_dB_sm);xlim([20 20000]);
 title('Mag dB sm');
 
 subplot(3,2,4);
-semilogx(f_lin,phase);xlim([0 20000]);
+semilogx(f_lin,phase);xlim([20 20000]);
 title('Phase');
 ylim([-pi pi]);
 
 subplot(3,2,5);
-semilogx(f_lin,phd);xlim([0 20000]);
+semilogx(w,phd);xlim([20 20000]);
 title('Phase Delay');
 
 subplot(3,2,6);
-semilogx(f_lin',pha);xlim([20 20000]);
-title('Phase sm ');
+semilogx(f_lin(2:end),gd);xlim([20 20000]);
+title('Group Delay ');
 
 
 
