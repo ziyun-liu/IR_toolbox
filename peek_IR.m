@@ -14,7 +14,7 @@ if nargin < 2
 end
 
 if length(IR)>8192
-    nfft = length(IR);
+    nfft = size(IR,1);
 else
     nfft = 8192;
 end
