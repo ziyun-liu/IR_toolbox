@@ -5,7 +5,7 @@ function [ mag, phase, f_lin ] = ir2magphase( IR, fs, nfft)
 % 2020-03-02    First Ed. by Liu Ziyun
 
 rtf = fft(IR, nfft);
-mag = abs(rtf(1:end/2+1,1));
+mag = abs(rtf(1:end/2+1,1))*2/nfft;
 
 phase = angle(rtf(1:end/2+1,1));
 
