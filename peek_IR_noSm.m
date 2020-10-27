@@ -1,4 +1,4 @@
-function [  ] = peek_IR( IR , oct_sm, fs, mic_sen_mkp)
+function [  ] = peek_IR_noSm( IR , oct_sm, fs, mic_sen_mkp)
 % Take a peek of IR and its freq response
 
 if nargin < 4
